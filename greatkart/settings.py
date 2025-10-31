@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'store',
     'carts',
+    'orders', 
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,12 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
+# SMTP configuration (Gmail)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False  
+EMAIL_HOST_USER = 'molkahamdi123@gmail.com'  
+EMAIL_HOST_PASSWORD = 'lxfr pham vwbu jpat'  
+
+ 
