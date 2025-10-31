@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'store',
     'carts',
+    'orders', 
 ]
 
 MIDDLEWARE = [
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'greatkart.urls'
+ROOT_URLCONF = 'GreatKart.urls'
 
 TEMPLATES = [
     {
@@ -62,16 +63,18 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'Category.context_processors.menu_links',
+                'carts.context_processors.counter',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'greatkart.wsgi.application'
+WSGI_APPLICATION = 'GreatKart.wsgi.application'
 #on va dire a django d'utiliser notre modèle de compte personnalisé
 AUTH_USER_MODEL = 'account.Account'
 
@@ -121,10 +124,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'   
 STATICFILES_DIRS = [
-    BASE_DIR / 'greatkart/static',
+    BASE_DIR / 'static',                
 ]
 # Media files configuration
 MEDIA_URL = '/media/'
@@ -133,3 +137,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
+# SMTP configuration (Gmail)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False  
+EMAIL_HOST_USER = 'molkahamdi123@gmail.com'  
+EMAIL_HOST_PASSWORD = 'lxfr pham vwbu jpat'  
+
+ 
