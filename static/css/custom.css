@@ -1,37 +1,56 @@
-.rate > input{
-display: none;
-}
-.rate{
-display: inline-block;;
-border: 0;
-}
-.rate > label{
-float: right;
-}
-/* Showing the stars */
-.rate > label:before{
-display: inline-block;
-font-size: 1.1rem;
-font-family: FontAwesome;
-content: "\f005";
-margin:0;
-padding:0.3rem .2rem;
-cursor: pointer;
+/* Hide original radio inputs but keep them focusable */
+.rate > input {
+    position: absolute;
+    top: -9999px; /* move offscreen but remain focusable */
 }
 
-.rate .half:before{
-    content: "\f089";
+/* Wrapper */
+.rate {
+    display: inline-block;
+    border: 0;
+    direction: rtl; /* makes stars fill right-to-left */
+}
+
+/* Base star label */
+.rate > label {
+    float: right;
+    font-size: 1.8rem;
+    font-family: "Font Awesome 5 Free"; /* required for stars */
+    font-weight: 900;
+    cursor: pointer;
+    color: #ccc;
+    margin: 0;
+    padding: 0.3rem 0.2rem;
+    transition: color 0.2s ease-in-out;
+}
+
+/* Full star */
+.rate > label:before {
+    content: "\f005"; /* solid star */
+}
+
+/* Half star */
+.rate > .half:before {
+    content: "\f089"; /* half star */
     position: absolute;
     padding-right: 0;
 }
 
-/* click and hover*/
-input:checked ~ label, label:hover ~ label{
+/* Highlight when checked */
+.rate > input:checked ~ label {
     color: #ffb503;
 }
 
-/* hover highlight*/
-input:checked + label:hover, input:checked ~ label:hover, input:checked ~ label:hover ~ label,
+/* Hover effect */
+.rate > label:hover,
+.rate > label:hover ~ label {
+    color: #ffb503;
+}
+
+/* Smooth transition between hover and checked */
+.rate > input:checked + label:hover,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
 label:hover ~ input:checked ~ label {
     color: #cc9000;
 }

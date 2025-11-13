@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import Q
 
 from Category.models import Category
@@ -8,7 +8,10 @@ from store.models import Product, ReviewRating
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import HttpResponse
-from .forms import ReviewForm    
+from .forms import ReviewForm
+from django.contrib import messages
+
+
 # Create your views here.
 def store(request, category_slug=None):
     categories = None
@@ -61,25 +64,78 @@ def search(request):
 
 def submit_review(request, product_id):
     url = request.META.get('HTTP_REFERER')
+    product = get_object_or_404(Product, id=product_id)
+
     if request.method == 'POST':
         try:
-            reviews = ReviewRating.objects.get(user__id=request.user.id, product__id=product_id)
-            form = ReviewForm(request.POST, instance=reviews)
-            form.save()
-            messages.success(request, 'Thank you! your review has been updated.')
-            return redirect(url)
+            # ✅ If review already exists — update it
+            review = ReviewRating.objects.get(user=request.user, product=product)
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Thank you! Your review has been updated.')
+            else:
+                print("❌ FORM ERRORS (update):", form.errors)
+                messages.error(request, 'There was a problem submitting your review.')
         except ReviewRating.DoesNotExist:
+            # ✅ Otherwise create new review
             form = ReviewForm(request.POST)
             if form.is_valid():
                 data = ReviewRating()
                 data.subject = form.cleaned_data['subject']
-                data.rating = form.cleaned_data['rating']
                 data.review = form.cleaned_data['review']
+                # ✅ match HTML name="rating" (lowercase)
+                data.rating = request.POST.get('rating')
                 data.ip = request.META.get('REMOTE_ADDR')
-                data.product_id = product_id
-                data.user_id = request.user.id
+                data.product = product
+                data.user = request.user
                 data.save()
-                messages.success(request, 'Thank you! your review has been submitted.')
-                return redirect(url)
+                messages.success(request, 'Thank you! Your review has been submitted.')
+            else:
+                print("❌ FORM ERRORS (create):", form.errors)
+                messages.error(request, 'There was a problem submitting your review.')
+
+        # ✅ Always return a valid response
+        return redirect(url)
+
+    # If GET or something else, redirect safely
+    return redirect(url)
+    url = request.META.get('HTTP_REFERER', '/')  # fallback to home if referer is missing
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == 'POST':
+        try:
+            # if review exists — update it
+            review = ReviewRating.objects.get(user=request.user, product=product)
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Thank you! Your review has been updated.')
+            else:
+                messages.error(request, 'There was a problem updating your review.')
+        except ReviewRating.DoesNotExist:
+            # otherwise create new review
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                print("✅ FORM VALID")
+                data = ReviewRating()
+                data.subject = form.cleaned_data.get('subject')
+                data.review = form.cleaned_data.get('review')
+                # fix field name difference
+                data.rating = request.POST.get('Rating')  # ✅ matches HTML input name
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.product = product
+                data.user = request.user
+                data.save()
+                messages.success(request, 'Thank you! Your review has been submitted.')
+            else:
+                print("❌ FORM ERRORS:", form.errors)
+                messages.error(request, 'There was a problem submitting your review.')
+
+        # ✅ always return a redirect
+        return redirect(url)
+
+    # ✅ handle GET request safely
+    return redirect(url)
 
             
