@@ -57,6 +57,9 @@ class Account(AbstractBaseUser):
     #pour dire a ce compte que nous utilisons mon gestionnaire de compte pour toutes ces opérations 
     objects = MyAccountManager()
 
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
     def __str__(self):
         return self.email 
     # SI UTILISATEUR ET ADMIN  IL A TOUS LES DROITS
