@@ -43,29 +43,34 @@
 
 							<hr>
 							<div class="row">
-								<div class="item-option-select">
+								<div class="col-md-6">
+									<div class="item-option-select">
 									<h6>Choose Color</h6>
-									<select name="color" class="form-control" required>
+									<select name="color" class="form-control w-100" required>
 										<option value="" disabled selected>Choose a Color</option>
 										{% for i in single_product.variation_set.colors %}
-										<option value="{{ i.variation_value | lower  }}">{{ i.variation_value | capfirst
-											}}</option>
+										<option value="{{ i.variation_value|lower }}">{{ i.variation_value|capfirst }}</option>
 										{% endfor %}
 									</select>
+									</div>
 								</div>
-							</div>
-							<div class="row">
-								<div class="item-option-select">
+								</div>
+
+								<div class="row">
+								<div class="col-md-6">
+									<div class="item-option-select">
 									<h6>Select Size</h6>
-									<select name="size" class="form-control">
+									<select name="size" class="form-control w-100">
 										<option value="" disabled selected>Choose a Size</option>
 										{% for i in single_product.variation_set.sizes %}
-										<option value="{{ i.variation_value | lower }}">{{ i.variation_value | capfirst
-											}}</option>
+										<option value="{{ i.variation_value|lower }}">{{ i.variation_value|capfirst }}</option>
 										{% endfor %}
 									</select>
+									</div>
 								</div>
-							</div>
+								</div>
+
+
 							<hr>
 							{% if single_product.stock <= 0 %} <h5 class="text-danger">Out of Stock</h5>
 								{% else %}
