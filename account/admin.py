@@ -16,6 +16,7 @@ class AccountAdmin(UserAdmin):
     #mdps et lecture seule
     fieldsets = ()
 
+
 class UserProfileAdmin(admin.ModelAdmin):
     def thumbnail(self, object):
         if object.profile_picture and hasattr(object.profile_picture, 'url'):
