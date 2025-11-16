@@ -18,9 +18,14 @@ class AccountAdmin(UserAdmin):
 
 class UserProfileAdmin(admin.ModelAdmin):
     def thumbnail(self, object):
-        return format_html('<img src="{}" width="30" style="border_radius:50%;">'.format(object.profile_picture.url))
+        if object.profile_picture and hasattr(object.profile_picture, 'url'):
+            return format_html('<img src="{}" width="30" style="border-radius:50%;">'.format(object.profile_picture.url))
+        else:
+            return format_html('<img src="/static/images/default-avatar.png" width="30" style="border-radius:50%;">')
     thumbnail.short_description = 'Profile Picture'
-    list_display = ('thumbnail','user', 'city', 'state', 'country')
+
+    list_display = ('thumbnail', 'user', 'city', 'state', 'country')
+
 
 
 admin.site.register(Account, AccountAdmin)

@@ -1,12 +1,12 @@
 from itertools import product
 from django.contrib import messages, auth
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render , get_object_or_404
 
 from carts.models import Cart, CartItem
 
-from .forms import RegistrationForm
-from .models import Account
+from .forms import RegistrationForm, UserForm, UserProfileForm
+from .models import Account, UserProfile
 from orders.models import Order
 from django.contrib.auth.decorators import login_required
 from carts.views import _cart_id 
@@ -224,5 +224,29 @@ def my_orders(request):
     return render(request, 'accounts/my_orders.html', context)
 
 
+@login_required(login_url='login')
 def edit_profile(request):
-    return render(request, 'accounts/edit_profile.html')
+    # ✅ Ensure the profile always exists (get or create)
+    userprofile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your Profile Has Been Updated.')
+            return redirect('edit_profile')
+
+    else:
+        # ✅ Here, userprofile definitely exists — no error now
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=userprofile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'userprofile': userprofile, 
+    }
+    return render(request, 'accounts/edit_profile.html', context)
