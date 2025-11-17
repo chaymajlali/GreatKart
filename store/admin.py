@@ -1,12 +1,22 @@
 from django.contrib import admin
-from .models import Product, Variation, ReviewRating
-# Register your models here.
+from .models import Product, Variation, ReviewRating, ProductGallery
+import admin_thumbnails
+
+@admin_thumbnails.thumbnail('image')
+class ProductGalleryInline(admin.TabularInline):
+    model = ProductGallery
+    extra = 1
+
+
+
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_name', 'price', 'stock', 'category', 'created_date', 'modified_date','is_available')
     prepopulated_fields = {'slug': ('product_name',)}
     list_editable = ('price', 'stock', 'is_available')
     search_fields = ('product_name', 'category__category_name')
     list_per_page = 20
+    inlines = [ProductGalleryInline]
 
 class VaritationAdmin(admin.ModelAdmin):
     list_display = ( 'product' ,'variation_category', 'variation_value','is_active')
@@ -15,3 +25,4 @@ class VaritationAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Variation, VaritationAdmin)
 admin.site.register(ReviewRating)
+admin.site.register(ProductGallery)
