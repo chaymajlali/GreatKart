@@ -1,0 +1,92 @@
+/* Hide original radio inputs but keep them focusable */
+.rate > input {
+    position: absolute;
+    top: -9999px; /* move offscreen but remain focusable */
+}
+
+/* Wrapper */
+.rate {
+    display: inline-block;
+    border: 0;
+    direction: rtl; /* makes stars fill right-to-left */
+}
+
+/* Base star label */
+.rate > label {
+    float: right;
+    font-size: 1.8rem;
+    font-family: "Font Awesome 5 Free"; /* required for stars */
+    font-weight: 900;
+    cursor: pointer;
+    color: #ccc;
+    margin: 0;
+    padding: 0.3rem 0.2rem;
+    transition: color 0.2s ease-in-out;
+}
+
+/* Full star */
+.rate > label:before {
+    content: "\f005"; /* solid star */
+}
+
+/* Half star */
+.rate > .half:before {
+    content: "\f089"; /* half star */
+    position: absolute;
+    padding-right: 0;
+}
+
+/* Highlight when checked */
+.rate > input:checked ~ label {
+    color: #ffb503;
+}
+
+/* Hover effect */
+.rate > label:hover,
+.rate > label:hover ~ label {
+    color: #ffb503;
+}
+
+/* Smooth transition between hover and checked */
+.rate > input:checked + label:hover,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+label:hover ~ input:checked ~ label {
+    color: #cc9000;
+}
+
+.rating-star i{
+    color: #ffb503 !important;
+}
+
+
+/* ===== Product Gallery Thumbnails ===== */
+.thumb-list {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+  padding: 0;
+  list-style: none;
+  justify-content: center;
+}
+
+.thumb-list li {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.thumb-list li:hover {
+  border-color: #007bff;
+  transform: scale(1.05);
+}
+
+.thumb-list img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  display: block;
+}
+

@@ -60,3 +60,32 @@ label:hover ~ input:checked ~ label {
 }
 
 
+/* ===== Product Gallery Thumbnails ===== */
+.thumb-list {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+  padding: 0;
+  list-style: none;
+  justify-content: center;
+}
+
+.thumb-list li {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.thumb-list li:hover {
+  border-color: #007bff;
+  transform: scale(1.05);
+}
+
+.thumb-list img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  display: block;
+}
